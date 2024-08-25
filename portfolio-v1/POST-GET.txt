@@ -1,0 +1,22 @@
+1. Sekvensdiagram (POST) - Opprette et nytt prosjekt
+
+Bruker klikker på "Lagre nytt prosjekt"-knappen i nettleseren.
+Nettleseren sender en POST-forespørsel til serveren med prosjektdata.
+Serveren mottar forespørselen og behandler dataene.
+Serveren lagrer det nye prosjektet i databasen.
+Serveren sender en suksessrespons tilbake til nettleseren.
+Nettleseren oppdaterer brukergrensesnittet for å reflektere det nye prosjektet.
+
+2. Sekvensdiagram (GET) - Hente alle prosjekter
+
+Nettleseren sender en GET-forespørsel til serveren for å hente alle prosjekter.
+Serveren henter alle prosjektene fra databasen.
+Serveren sender en respons med prosjektdata i JSON-format tilbake til nettleseren.
+Nettleseren parser JSON-dataene og viser prosjektene på siden.
+
+Nettleser -> Server: GET /projects
+Server -> Database: Hent alle prosjekter
+Database -> Server: Returner prosjektliste
+Server -> Nettleser: 200 OK (Prosjektdata i JSON-format)
+Nettleser -> Nettleser: Parse JSON-data og vis prosjekter
+

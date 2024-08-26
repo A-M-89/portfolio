@@ -34,27 +34,29 @@
         </ul>
     </section>
 
-    <ul>
-      <section id="projectsList">
-        <h2>Projects</h2>
-        <div class="project">
-            <ol><li><h3>Portfolio-v1</h3></li>
+    
+    <section id="projectsList">
+      <h2>Projects</h2>
+      <div class="projects">
+        <ol id="projectItems">
+          <li>
+            <h3>Portfolio-v1</h3>
             <p>Beskrivelse: Første Oblig.</p>
-          </ol>
-        </div>
-      </section>
-    </ul>
-
-    <section id="NyProjekt">
-      <h3>Lage ny projekt:</h3>
-      <label for="title">Prosjekttittel:</label>
-      <input type="text" id="title" name="title">
-      <br></br>
-      <label for="description">Beskrivelse:</label>
-      <input id="description" name="description"></input>
-      <br></br>
-      <button type="lagre">Opprett Prosjekt</button>
+          </li>
+        </ol>
+      </div>
     </section>
+
+    <h3>Lage ny projekt:</h3>
+      <form id="NewProjectFrom">
+        <label for="title">Prosjekttittel:</label>
+        <input type="text" id="title" name="title" required />
+        <br></br>
+        <label for="description">Beskrivelse:</label>
+        <input id="description" name="description" required />
+        <br></br>
+        <button type="submit">Opprett Prosjekt</button>
+      </form>
 
     <section id="contact">
         <h2>Contact:</h2>

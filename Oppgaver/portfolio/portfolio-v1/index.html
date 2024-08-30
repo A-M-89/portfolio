@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ahmad Yahya</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Ahmad Yahya</h1>
+      <p>Web Developer & Designer</p>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+    
+    <button type="button" id="dark-mode">Toggle Dark Mode</button>
+
+    <section id="profil">
+      <h2>Profil</h2>
+      <p>Effektiv, sosial og fleksibel, ansvarsbevisst, har evnen til å kunne tilpasse meg situasjoner og arbeidsmiljø på kort tid og lærer veldig raskt.</p>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <ul>
+        <li>HTML/CSS</li>
+        <li>JavaScript</li>
+        <li>SQL</li>
+      </ul>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <div class="projects">
+        <ol id="projectItems">
+          <li>
+            <h3>Portfolio-v1</h3>
+            <p>Description: First project description</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <form id="newProjectForm">
+      <label for="title">Project Title:</label>
+      <input type="text" id="title" name="title" required />
+      <br />
+      <label for="description">Description:</label>
+      <input type="text" id="description" name="description" required />
+      <br />
+      <button type="submit">Add Project</button>
+    </form>
+
+    <ul id="projects-list">
+      <!-- Projects -->
+    </ul>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:Ahmad.Yahya@hiof.no">Ahmad.Yahya@hiof.no</a></p>
+      <p>Github: <a href="https://github.com/A-M-89/Ahmadyahya89.github.io" target="_blank">Ahmad Yahya Github</a></p>
+      <form>
+        <label for="input">Message:</label>
+        <input type="text" id="input" placeholder="Type your message here..." />
+        <button type="submit">Send</button>
+      </form>
+    </section>
+
+    <footer>
+      <p>&copy; 2024 Ahmad Yahya. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

@@ -5,7 +5,7 @@ import { serveStatic } from "@hono/node-server/serve-static";
 
 const app = new Hono();
 app.use("/*", cors());
-app.use("/static/*", serveStatic({ root: "./" }));
+app.use("/static/*", serveStatic({ root: "./static" }));
 
 const habits = [
   {
@@ -39,14 +39,16 @@ const pageHTML = `
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="./static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css">
     <title>Streaky</title>
 </head>
 <body>
     <h1>Du har ${habits.length} vaner</h1>
-    <div id="habit-id"></div>
-    <img src="./static/webapp.png" alt="Streaky logo" />
-    <script type="module" src="./static/index.js"></script>
+    <ul id="habit-list"></ul> <!-- Updated to include a list for habits -->
+    <input type="text" id="new-habit-input" placeholder="Ny vane">
+    <button id="add-habit-button">Legg til vane</button>
+    <img src="/static/webapp.png" alt="Streaky logo" />
+    <script type="module" src="/static/main.js"></script>
 </body>
 </html>`;
 

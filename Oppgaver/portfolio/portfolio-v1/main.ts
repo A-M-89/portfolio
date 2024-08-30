@@ -10,6 +10,7 @@ if (darkModeButton) {
   darkModeButton.addEventListener('click', toggleDarkMode);
 }
 
+
 const fetchDataFromServer = async () => {
   try {
     const response = await fetch("http://localhost:3999/projects", {

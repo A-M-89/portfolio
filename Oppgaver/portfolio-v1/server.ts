@@ -2,17 +2,19 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { serveStatic } from "@hono/node-server/serve-static";
-import { readFile } from "node:fs/promises"; // Correct import for readFile
+import { readFile } from "node:fs/promises";
 
 const app = new Hono();
 
-// Enable CORS
 app.use("/*", cors());
 
-// Serve static files from the project root
-app.use("/*", serveStatic({ root: "./" }));
+app.use("/statics/*", serveStatic({ root: "./" }));
 
-// Serve index.html at the root URL
+app.get("/json", async (c) => {
+  const data = await readFile("./data.json", "utf-8");
+  return c.json(JSON.parse(data));
+});
+
 app.get("/", async (c) => {
     try {
         const html = await readFile("./index.html", "utf-8");
@@ -22,12 +24,11 @@ app.get("/", async (c) => {
         return c.text("Error loading page", 500);
     }
 });
-
 const port = 3999;
 
-console.log(`Server is running`);
+console.log("Server is running YEAH");
 
 serve({
-    fetch: app.fetch,
-    port,
+  fetch: app.fetch,
+  port,
 });

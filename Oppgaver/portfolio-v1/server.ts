@@ -8,12 +8,7 @@ const app = new Hono();
 
 app.use("/*", cors());
 
-app.use("/statics/*", serveStatic({ root: "./" }));
-
-app.get("/json", async (c) => {
-  const data = await readFile("./data.json", "utf-8");
-  return c.json(JSON.parse(data));
-});
+app.use("/*", serveStatic({ root: "./" }));
 
 app.get("/", async (c) => {
     try {
@@ -24,11 +19,12 @@ app.get("/", async (c) => {
         return c.text("Error loading page", 500);
     }
 });
+
 const port = 3999;
 
-console.log("Server is running YEAH");
+console.log(`Server is running`);
 
 serve({
-  fetch: app.fetch,
-  port,
+    fetch: app.fetch,
+    port,
 });

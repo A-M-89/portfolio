@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ahmad Yahya</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <header>
@@ -35,7 +35,7 @@
       </ul>
     </section>
 
-    <section id="projects">
+<section id="projects">
       <h2>Projects</h2>
       <div class="projects">
         <ol id="projectItems">
@@ -47,7 +47,7 @@
       </div>
     </section>
     <p>Legg til ny projekt</p>
-    <form id="newProjectForm">
+    <form id="projectForm">
       <label for="title">Project Title:</label>
       <input type="text" id="title" name="title" required />
       <br />
@@ -57,9 +57,12 @@
       <button type="submit">Add Project</button>
     </form>
 
-    <ul id="projects-list">
-      <!-- Projects -->
+    <ul id="projectslist">
+      
     </ul>
+     <pre id="json"></pre>
+
+
 
     <section id="contact">
       <h2>Contact</h2>
@@ -76,6 +79,6 @@
       <p>&copy; 2024 Ahmad Yahya. All rights reserved.</p>
     </footer>
 
-    <script type="module" src="/statics/main.ts"></script>
+    <script type="module" src="/main.ts"></script>
   </body>
 </html>

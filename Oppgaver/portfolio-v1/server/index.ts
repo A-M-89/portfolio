@@ -45,11 +45,12 @@ app.use("/static/*", serveStatic({ root: path.resolve(__dirname) }));
 
 // Serve JSON data from a file
 app.get("/json", async (c) => {
+  
   try {
-    const filePath = path.resolve(__dirname, 'data.json');
+    const filePath = path.resolve(__dirname, '/data.json');
     const data = await readFile(filePath, "utf8");
-    const dataAsJson = JSON.parse(data);
-    return c.json(dataAsJson);
+    const projects  = JSON.parse(data);
+    return c.json(projects);
   } catch (error) {
     console.error("Error reading data.json:", error);
     return c.json({ error: "Error reading data.json" }, { status: 500 });

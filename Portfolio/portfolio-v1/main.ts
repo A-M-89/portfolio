@@ -103,7 +103,7 @@ function loadFromApi() {
         // Forsøker å parse og validere dataene med Zod-skjemaet
         const validatedProjects = ProjectArraySchema.parse(data);
 
-        projects.push(...validatedProjects); // Legger til validerte vaner i den interne listen
+        projects.push(...validatedProjects); // Legger til validerte project i den interne listen
         updateProjectsList(); // Oppdaterer visningen på nettsiden
       } catch (error) {
         if (error instanceof z.ZodError) {

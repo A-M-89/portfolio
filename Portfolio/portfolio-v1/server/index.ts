@@ -15,7 +15,7 @@ app.use("/assets/*", serveStatic({ root: "./" }));
 // Serve statiske filer fra statics (som lages ved build)
 app.use("/statics/*", serveStatic({ root: "./" }));
 
-// Setter typen til habits til å være en array av Habit
+// Setter typen til Projects til å være en array av Project
 const projects: Project[] = [
   {
     id: crypto.randomUUID(),
@@ -34,7 +34,7 @@ app.post("/api/add", async (c) => {
   const newProject = await c.req.json();
   // Validerer at dataen vi mottar er en gyldig Habit
   const project = ProjectSchema.parse(newProject);
-  // Sjekker om habit er en gyldig Habit, og returnerer en feilmelding hvis ikke
+  // Sjekker om Project er en gyldig Project, og returnerer en feilmelding hvis ikke
   if (!project) return c.json({ error: "Invalid project" }, { status: 400 });
   console.log(project);
   projects.push(project);
@@ -46,12 +46,12 @@ app.post("/api/add", async (c) => {
   // Skriver til filen data.json
   await fs.writeFile(
     "./assets/data.json",
-    // Legger til den nye habiten i listen med habits
+    // Legger til den nye Projecten i listen med Projects
     // Bruker JSON.stringify for å konvertere dataen til en JSON-streng
     JSON.stringify([...data, project], null, 2)
   );
 
-  // Returnerer en liste med alle habits. Bruker generisk type for å fortelle at vi returnerer en array av Habit
+  // Returnerer en liste med alle Projects. Bruker generisk type for å fortelle at vi returnerer en array av Project
   return c.json<Project[]>(projects, { status: 201 });
 });
 
@@ -143,7 +143,7 @@ app.get("/html", (c) => {
 });
 
 app.get("/api/projects", (c) => {
-  // Returnerer en liste med alle habits. Bruker generisk type for å fortelle at vi returnerer en array av Habit
+  // Returnerer en liste med alle Projects. Bruker generisk type for å fortelle at vi returnerer en array av Project
   return c.json<Project[]>(projects);
 });
 
@@ -151,13 +151,6 @@ const port = 3999;
 
 console.log(`Server is running on port ${port}`);
 
-// Trenger ikke da Vite via vite.server.config.ts
-// håndterer det i dette tilfelle
-
-// serve({
-//   fetch: app.fetch,
-//   port,
-// });
 
 export default app;
 

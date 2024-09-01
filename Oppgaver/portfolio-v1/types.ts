@@ -1,21 +1,21 @@
 import { z } from "zod";
 
-// Define the Zod schema for a Project
+
+// Definerer et Zod-skjema for Habit
 export const ProjectSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
-  createdAt: z.coerce.date(), // Use z.coerce.date() to handle Date objects
 });
 
-// Define a schema for creating a new Project
+// Definerer et Zod-skjema for å opprette en ny Habit
 export const ProjectCreateSchema = ProjectSchema.omit({ id: true });
 
-// Define a schema for an array of Projects
+// Definerer et Zod-skjema for en array av Habit
 export const ProjectArraySchema = z.array(ProjectSchema);
 
-// Define the TypeScript type based on the Zod schema
+// Oppdatert type-definisjon basert på Zod-skjemaet
 export type Project = z.infer<typeof ProjectSchema>;
 
-// Define the TypeScript type for creating a Project
+// Oppdatert type-definisjon basert på Zod-skjemaet
 export type CreateProject = z.infer<typeof ProjectCreateSchema>;

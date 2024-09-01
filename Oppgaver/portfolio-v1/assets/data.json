@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Portfolio Website",
+    "description": "A personal portfolio website showcasing my skills, projects, and resume."
+  },
+  {
+    "id": 2,
+    "title": "Task Manager App",
+    "description": "A web application to manage daily tasks with features like to-do lists, deadlines, and notifications."
+  },
+  {
+    "id": 3,
+    "title": "E-commerce Website",
+    "description": "An online store with a shopping cart, product listings, and payment gateway integration."
+  },
+  {
+    "id": "ab93fc47-a602-4ad7-b8ae-00f15a301488",
+    "title": "assa",
+    "description": "sss"
+  },
+  {
+    "id": "cae3c672-ec5b-4cbd-be1d-61420bb0ba6b",
+    "title": "Proto",
+    "description": "Ahmad"
+  },
+  {
+    "id": "2308f2a1-8895-4cff-acc0-dab8d451d8f2",
+    "title": "ahmad",
+    "description": "yahya"
+  }
+]

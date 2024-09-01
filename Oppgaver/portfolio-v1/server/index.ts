@@ -1,91 +1,60 @@
-import { serve } from "@hono/node-server";
-import { Hono } from "hono";
+import { serve } from '@hono/node-server'
+import { Hono } from 'hono'
 import { cors } from "hono/cors";
 import { serveStatic } from "@hono/node-server/serve-static";
-import { readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
-import { z } from "zod";
-
-// Define the Project type
-type Project = {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: Date;
-};
-
-// Define a Zod schema for validation
-const ProjectSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  description: z.string(),
-  createdAt: z.string().transform(str => new Date(str)),
-});
-
-
-
-
-// Define the array of projects
-const projects: Project[] = [
-  {
-    id: crypto.randomUUID(),
-    title: "Project",
-    description: "description",
-    createdAt: new Date("2024-01-01"),
-  },
-];
+import { ProjectSchema, type Project } from "../types";
+import fs, { readFile } from "node:fs/promises";
 
 const app = new Hono();
 
 app.use("/*", cors());
 
-// Serve static files from the 'root directory' folder
-app.use("/static/*", serveStatic({ root: path.resolve(__dirname) }));
+// Serve statiske filer fra assets mappen
+app.use("/assets/*", serveStatic({ root: "./" }));
 
+// Serve statiske filer fra statics (som lages ved build)
+app.use("/statics/*", serveStatic({ root: "./" }));
 
-// Serve JSON data from a file
+// Setter typen til habits til å være en array av Habit
+const projects: Project[] = [
+  {
+    id: crypto.randomUUID(),
+    title: "321",
+    description: "123",
+  },
+];
+
 app.get("/json", async (c) => {
-  
-  try {
-    const filePath = path.resolve(__dirname, '/data.json');
-    const data = await readFile(filePath, "utf8");
-    const projects  = JSON.parse(data);
-    return c.json(projects);
-  } catch (error) {
-    console.error("Error reading data.json:", error);
-    return c.json({ error: "Error reading data.json" }, { status: 500 });
-  }
+  const data = await fs.readFile("./assets/data.json", "utf8");
+  const dataAsJson = JSON.parse(data);
+  return c.json(dataAsJson);
 });
 
-// Add a new project
 app.post("/api/add", async (c) => {
-  try {
-    const newProject = await c.req.json();
-    // Validate the incoming project data
-    const project = ProjectSchema.parse(newProject);
-    
-    projects.push(project);
+  const newProject = await c.req.json();
+  // Validerer at dataen vi mottar er en gyldig Habit
+  const project = ProjectSchema.parse(newProject);
+  // Sjekker om habit er en gyldig Habit, og returnerer en feilmelding hvis ikke
+  if (!project) return c.json({ error: "Invalid project" }, { status: 400 });
+  console.log(project);
+  projects.push(project);
 
-    const filePath = path.resolve(__dirname, 'data.json');
-    const jsonData = await readFile(filePath, "utf8");
-    const data = JSON.parse(jsonData);
+  const jsonData = await readFile("./assets/data.json", "utf-8");
 
-    await writeFile(filePath, JSON.stringify([...data, project], null, 2));
+  const data = JSON.parse(jsonData);
 
-    return c.json<Project[]>(projects, { status: 201 });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return c.json({ error: "Invalid Project data" }, { status: 400 });
-    } else {
-      console.error("Error adding project:", error);
-      return c.json({ error: "Error adding project" }, { status: 500 });
-    }
-  }
+  // Skriver til filen data.json
+  await fs.writeFile(
+    "./assets/data.json",
+    // Legger til den nye habiten i listen med habits
+    // Bruker JSON.stringify for å konvertere dataen til en JSON-streng
+    JSON.stringify([...data, project], null, 2)
+  );
+
+  // Returnerer en liste med alle habits. Bruker generisk type for å fortelle at vi returnerer en array av Habit
+  return c.json<Project[]>(projects, { status: 201 });
 });
 
-
-
-// HTML form for the front-end
 const htmlForm = `
 <!DOCTYPE html>
 <html lang="en">
@@ -94,7 +63,7 @@ const htmlForm = `
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ahmad Yahya</title>
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>
@@ -124,16 +93,7 @@ const htmlForm = `
       </ul>
     </section>
 
-<section id="projects">
-      <h2>Projects</h2>
-      <div class="projects">
-        <ol id="projectItems">
-          <li>
-            <h3>Portfolio-v1</h3>
-            <p>Description: First project description</p>
-          </li>
-        </ol>
-      </div>
+
     </section>
     <p>Legg til ny projekt</p>
     <form id="projectForm">
@@ -146,11 +106,15 @@ const htmlForm = `
       <button type="submit">Add Project</button>
     </form>
 
-    <ul id="projectslist">
-      
-    </ul>
-     <pre id="json"></pre>
+    <section id="projects">
+        <h2>Projects</h2>
+        <ul id="projectslist">
 
+        </ul>
+        <pre id="json"></pre>
+    </section>
+    
+         
 
 
     <section id="contact">
@@ -168,7 +132,7 @@ const htmlForm = `
       <p>&copy; 2024 Ahmad Yahya. All rights reserved.</p>
     </footer>
 
-    <script type="module" src="/main.ts"></script>
+    <script type="module" src="main.ts"></script>
   </body>
 </html>
 
@@ -178,8 +142,8 @@ app.get("/html", (c) => {
   return c.html(htmlForm);
 });
 
-// Endpoint to get all projects
 app.get("/api/projects", (c) => {
+  // Returnerer en liste med alle habits. Bruker generisk type for å fortelle at vi returnerer en array av Habit
   return c.json<Project[]>(projects);
 });
 
@@ -187,7 +151,17 @@ const port = 3999;
 
 console.log(`Server is running on port ${port}`);
 
+// Trenger ikke da Vite via vite.server.config.ts
+// håndterer det i dette tilfelle
+
+// serve({
+//   fetch: app.fetch,
+//   port,
+// });
+
+export default app;
+
 serve({
   fetch: app.fetch,
-  port,
-});
+  port
+})

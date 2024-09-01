@@ -1,10 +1,9 @@
-import './style.css';
+import './assets/style.css'
 import { z } from "zod";
 import { ProjectArraySchema, type Project } from "./types";
 
-// Dark mode toggle functionality
-const darkModeButton = document.getElementById('dark-mode') as HTMLButtonElement | null;
 
+const darkModeButton = document.getElementById('dark-mode') as HTMLButtonElement | null;
 function toggleDarkMode(): void {
   document.body.classList.toggle('dark-mode');
 }
@@ -13,27 +12,27 @@ if (darkModeButton) {
   darkModeButton.addEventListener('click', toggleDarkMode);
 }
 
-// Form and list elements
 const form = document.getElementById("projectForm") as HTMLFormElement;
 const projectsList = document.getElementById("projectsList") as HTMLUListElement;
-const projects: Project[] = []; // Changed from `habits` to `projects`
+const projects: Project[] = [];
 
-// Handle form submission
 form.addEventListener("submit", async (event: SubmitEvent) => {
   event.preventDefault();
 
-  const newProject: Project = {
+  const newProject = {
     id: crypto.randomUUID(),
     title: (
-      (event.target as HTMLFormElement).elements.namedItem("title") as HTMLInputElement
+      (event.target as HTMLFormElement).elements.namedItem(
+        "title"
+      ) as HTMLInputElement
     )?.value,
     description: (
-      (event.target as HTMLFormElement).elements.namedItem("description") as HTMLInputElement
+      (event.target as HTMLFormElement).elements.namedItem(
+        "description"
+      ) as HTMLInputElement
     )?.value,
-    createdAt: new Date(),
-  };
 
-  console.log("Submitting new project:", newProject); // Log for debugging
+  };
 
   projects.push(newProject);
   updateProjectsList();
@@ -47,78 +46,77 @@ form.addEventListener("submit", async (event: SubmitEvent) => {
       body: JSON.stringify(newProject),
     });
 
-    if (response.ok) {
-      loadFromApi(); // Use loadFromApi to refresh the list from server
-      console.log("Project saved to server");
+    if (response.status === 201) {
+      loadFromJSON();
+      console.log("Vane lagret på serveren");
     } else {
-      const errorText = await response.text();
-      console.error("Error saving project to server:", response.status, errorText);
+      console.error("Feil ved lagring av vane på serveren");
     }
   } catch (error) {
-    console.error("Error sending data to server:", error);
+    console.error("Feil ved sending av data til serveren:", error);
   }
 });
 
-
-
-// Update the list of projects on the page
 function updateProjectsList() {
+  console.log(projects);
   if (!projectsList) return;
   projectsList.innerHTML = "";
-
-  for (const project of projects) {
+    for (const project of projects) {
     const listItem = document.createElement("li");
-    listItem.textContent = `${project.title} - ${project.description} - ${new Date(project.createdAt).toLocaleDateString()}`;
+    listItem.textContent = `${project.id} - ${project.title} - ${project.description}
+    ).toLocaleDateString()}`;
     projectsList.appendChild(listItem);
   }
 }
 
-// Load data from local JSON file
 function loadFromJSON() {
+  // Henter ut div med id `json`
   const jsonId = document.getElementById("json");
   if (jsonId) jsonId.innerHTML = "";
 
-  fetch("data.json")
-    .then(response => response.json())
-    .then(data => {
+  fetch("assets/data.json")
+    .then((response) => {
+      // Konverterer data til json format
+      return response.json();
+    })
+    .then((data) => {
+      // Debugging
       console.log(data);
+      // Går igjennom dataen og lager en `p` til hvert element.
       for (const project of data) {
         const element = document.createElement("p");
-        element.textContent = `${project.title}`;
-        element.textContent = `${project.description}`;
+        // Legger til verdien koblet til `title` nøkkelen i .json filen
+        element.textContent = `${project.id} - ${project.title} \n ${project.description}`;
+        // Legger innholdet til div-ens
         jsonId?.appendChild(element);
       }
-    })
-    .catch(error => {
-      console.error("Error loading JSON data:", error);
+
+      
     });
 }
 
-// Load data from API
 function loadFromApi() {
   fetch("/api/projects")
-    .then(response => response.json())
+    .then((response) => response.json())
     .then((data: unknown) => {
       try {
-        // Validate data with Zod schema
+        // Forsøker å parse og validere dataene med Zod-skjemaet
         const validatedProjects = ProjectArraySchema.parse(data);
 
-        projects.length = 0; // Clear existing projects
-        projects.push(...validatedProjects);
-        updateProjectsList();
+        projects.push(...validatedProjects); // Legger til validerte vaner i den interne listen
+        updateProjectsList(); // Oppdaterer visningen på nettsiden
       } catch (error) {
         if (error instanceof z.ZodError) {
-          console.error("Invalid data received from server:", error.errors);
+          console.error("Ugyldig data mottatt fra serveren:", error.errors);
         } else {
-          console.error("Unexpected error during data validation:", error);
+          console.error("Uventet feil ved validering av data:", error);
         }
       }
     })
-    .catch(error => {
-      console.error("Error fetching data from server:", error);
+    .catch((error: Error) => {
+      console.error("Feil ved henting av data fra serveren:", error);
     });
 }
 
-// Initial data load
 loadFromApi();
 loadFromJSON();

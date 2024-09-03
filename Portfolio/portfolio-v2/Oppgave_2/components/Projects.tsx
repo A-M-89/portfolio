@@ -1,24 +1,15 @@
-import Project from './Project';
+import React from 'react';
 
-type ProjectType = {
-  title: string;
-  description: string;
+type ProjectsProps = {
+  children: React.ReactNode;
 };
 
-export default function Projects() {
-  // Definer fire statiske prosjekter som objekter
-  const project1: ProjectType = { title: 'Project A', description: 'description A' };
-  const project2: ProjectType = { title: 'Project B', description: 'description B' };
-  const project3: ProjectType = { title: 'Project C', description: 'description C' };
-  const project4: ProjectType = { title: 'Project D', description: 'description D' };
- 
-
+export default function Projects({ children }: ProjectsProps) {
   return (
-    <>
-      <Project Project={project1} />
-      <Project Project={project2} />
-      <Project Project={project3} />
-      <Project Project={project4} />
-    </>
+    <section>
+      <h2>Projects:</h2>
+      <div>{children}</div>
+    </section>
   );
 }
+

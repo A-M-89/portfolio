@@ -1,18 +1,16 @@
-type ProjectType = {
-    title: string;
+type ProjectProps = {
+    id: string;
+    name: string;
     description: string;
   };
   
-  type ProjectProps = {
-    Project: ProjectType; // Merk at navnet er `project` med liten bokstav
-  };
-  
-  export default function Project({ Project }: ProjectProps) {
+  export default function Project({ name, description }: ProjectProps) {
     return (
       <div>
-        <h2>{Project.title}:</h2>
-        <p>{Project.description}</p>
+        <h3>{name}</h3>
+        <p>{description}</p>
       </div>
     );
   }
+  
   

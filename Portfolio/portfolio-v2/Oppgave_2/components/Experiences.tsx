@@ -1,13 +1,17 @@
-type Experience = {
-    experienceOne : string;
-    experienceTwo: string;
-  };
-  
-  export default function Experience(props: Experience) {
-    return (
-      <>
-        <h2><p>The First Experience: {props.experienceOne}!.</p></h2>
-        <h2><p>The Second Experience: {props.experienceTwo}!.</p></h2>
-      </>
-    );
-  }
+type ExperienceProps = {
+  experiences: {
+    id: string;
+    description: string;
+  }[];
+};
+
+export default function Experience({ experiences }: ExperienceProps) {
+  return (
+    <section>
+      <h2>Experiences:</h2>
+      {experiences.map((experience) => (
+        <p key={experience.id}>{experience.description}</p>
+      ))}
+    </section>
+  );
+}

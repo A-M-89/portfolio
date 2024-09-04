@@ -6,10 +6,12 @@ export const ProjectSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
+  createdAt: z.string(),  
+  category: z.string(), 
 });
 
 // Definerer et Zod-skjema for å opprette en ny Habit
-export const ProjectCreateSchema = ProjectSchema.omit({ id: true });
+export const ProjectCreateSchema = ProjectSchema.omit({ id: true, createdAt: true });
 
 // Definerer et Zod-skjema for en array av Habit
 export const ProjectArraySchema = z.array(ProjectSchema);

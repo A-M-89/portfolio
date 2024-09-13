@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dad Jokes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .joke {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input, button {
+            margin: 5px 0;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dad Jokes</h1>
+    <div id="jokesList"></div>
+    <form id="addJokeFormId">
+        <h2>Legg til dad joke</h2>
+        <input type="text" id="jokeTitle" placeholder="Joke setup" required>
+        <input type="text" id="jokeAnswer" placeholder="Joke punchline" required>
+        <button type="submit">Legg til</button>
+    </form>
+
+    <script>
+        const dadJokesFrontend = [
+            { id: 111, title: "Why don't scientists trust atoms?", answer: "Because they make up everything!" },
+            { id: 222, title: "What do you call a fake noodle?", answer: "An impasta!" },
+            { id: 333, title: "Why did the scarecrow win an award?", answer: "He was outstanding in his field!" },
+            { id: 444, title: "How do you organize a space party?", answer: "You planet!" },
+            { id: 555, title: "What do you call a bear with no teeth?", answer: "A gummy bear!" }
+        ];
+
+        const jokesList = document.getElementById('jokesList');
+        const addJokeForm = document.getElementById('addJokeFormId');
+
+        function displayJokes(jokes) {
+            jokesList.innerHTML = jokes.map(joke => `
+                <article class="joke">
+                    <h3>${joke.title}</h3>
+                    <p>${joke.answer}</p>
+                </article>
+            `).join('');
+        }
+
+        async function fetchJokes() {
+            // Fetch data fra server og kombiner det med dadJokesFrontend
+            const dataFromServer = "din fetch kode her"
+            if(!dataFromServer.length) return
+            return [...dadJokesFrontend, ...dataFromServer];
+        }
+
+        // Function to post a new joke (simulated)
+        async function postJoke(joke) {
+            // Send data til server. Sikre at ny "Joke" blir vist i frontend
+            const createdJoke = "din fetch kode her"
+            dadJokes.push(createdJoke);
+            displayJokes(dadJokes);
+        }
+
+        addJokeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('jokeTitle').value;
+            const answer = document.getElementById('jokeAnswer').value;
+            await postJoke({ title, answer });
+            addJokeForm.reset();
+        });
+
+        (async () => {
+            const jokes = await fetchJokes();
+            displayJokes(jokes);
+        })();
+    </script>
+</body>
+</html>

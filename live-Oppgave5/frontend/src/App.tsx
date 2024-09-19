@@ -1,5 +1,5 @@
 import Grid from "./components/Grid";
-
+import React, { useState, useEffect } from 'react';
 
 const students = [
   { id: "1", name: "Ahmad Yahya" },
@@ -7,6 +7,7 @@ const students = [
 ];
 
 function App() {
+  
   return (
     <main>
       <Grid students={students} />

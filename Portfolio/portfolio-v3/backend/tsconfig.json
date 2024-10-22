@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-    "forceConsistentCasingInFileNames": true
-  }
+    "target": "ESNext",                           // Use the latest ECMAScript features
+    "module": "ESNext",                           // Use ESNext modules
+    "moduleResolution": "Node",                   // Change this to Node for better compatibility
+    "strict": true,                               // Enable all strict type-checking options
+    "skipLibCheck": true,                         // Skip type checking of declaration files
+    "types": ["node"],                            // Include Node.js type definitions
+    "jsx": "react-jsx",                           // JSX support for React
+    "jsxImportSource": "hono/jsx",               // JSX source for Hono
+    "forceConsistentCasingInFileNames": true,    // Ensure consistent file naming
+    "esModuleInterop": true,                      // Enable interoperability between CommonJS and ES Modules
+    "outDir": "./dist",                           // Output directory for compiled files
+    "rootDir": "./src",                           // Root directory of source files
+    "typeRoots": ["./node_modules/@types"]       // Path for type definitions
+  },
+  "include": ["src/**/*", "src/tests/**/*"],          // Include all source and test files
+  "exclude": ["node_modules", "dist"]            // Exclude unnecessary directories
 }

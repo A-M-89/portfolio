@@ -1,0 +1,18 @@
+[
+    {
+      "name": "Project 1",
+      "description": "Description for project 1",
+      "isPublic": true
+    },
+    {
+      "name": "Project 2",
+      "description": "Description for project 2",
+      "isPublic": false
+    },
+    {
+      "name": "Project 3",
+      "description": "Description for project 3",
+      "isPublic": true
+    }
+  ]
+  

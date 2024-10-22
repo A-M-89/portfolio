@@ -1,12 +1,11 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { addProject, getProjects } from './db'; // Importing database functions
 import { projectSchema } from './schemas'; // Import the Zod schema
+import { Project } from './types'; // Import the Project type
 
 const app = new Hono();
-const dataFilePath = path.join(__dirname, 'projects.json');
 
 // Middleware to allow CORS
 app.use(
@@ -32,34 +31,32 @@ const getUserRoleFromCookies = (cookieHeader: string | undefined): string | null
   return null;
 };
 
-// Serve existing projects (GET request at the root path)
+// Serve all projects (GET request at the root path)
 app.get('/', async (c) => {
   try {
-    const data = await fs.readFile(dataFilePath, 'utf-8');
-    const projects = JSON.parse(data);
+    const projects: Project[] = getProjects(); // Retrieve all projects from the database
     return c.json(projects);
   } catch (error) {
-    console.error('Error reading projects:', error);
+    console.error('Error retrieving projects:', error);
     return c.json([], 500);
   }
 });
 
-// New endpoint to get all projects (GET request)
+// New endpoint to get all projects, filtered by role (GET request)
 app.get('/projects', async (c) => {
   try {
-    const data = await fs.readFile(dataFilePath, 'utf-8');
-    const projects = JSON.parse(data);
+    const projects: Project[] = getProjects(); // Retrieve all projects from the database
 
     // Get user role from cookies
     const userRole = getUserRoleFromCookies(c.req.header('cookie'));
 
     // Filter projects based on user role
     const filteredProjects =
-      userRole === 'admin' ? projects : projects.filter((project: any) => project.public);
+      userRole === 'admin' ? projects : projects.filter((project) => project.isPublic);
 
     return c.json(filteredProjects);
   } catch (error) {
-    console.error('Error reading projects:', error);
+    console.error('Error retrieving projects:', error);
     return c.json([], 500);
   }
 });
@@ -79,33 +76,25 @@ app.post('/projects', async (c) => {
     }
 
     const newProject = parsedProject.data; // Use validated data
-    newProject.createdAt = new Date().toISOString(); // Set createdAt
 
-    // Read existing projects
-    let projects = [];
-    try {
-      const data = await fs.readFile(dataFilePath, 'utf-8');
-      projects = JSON.parse(data);
-    } catch (err) {
-      console.error('Error reading projects:', err);
-    }
+    // Insert the new project into the database
+    const savedProject = addProject({
+      name: newProject.name,
+      description: newProject.description,
+      isPublic: newProject.isPublic,
+    });
 
-    // Add the new project
-    projects.push(newProject);
-
-    // Save the updated projects to the file
-    await fs.writeFile(dataFilePath, JSON.stringify(projects, null, 2));
-
-    return c.json(projects);
+    return c.json(savedProject);
   } catch (error) {
     console.error('Error saving project:', error);
     return c.json({ error: 'Unable to save project' }, 500);
   }
 });
 
+// Define the port and start the server
 const port = 3000;
 console.log(`Server is running on port ${port}`);
 serve({
   fetch: app.fetch,
-  port
+  port,
 });
